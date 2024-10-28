@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'produk_detail.dart'; // Import halaman produk detail
 
 class DashboardPage extends StatelessWidget {
   final List<Map<String, String>> salesData = [
@@ -55,60 +56,65 @@ class DashboardPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 16),
-            Center(
-              child: SizedBox(
-                width: 600, // Lebar tabel lebih kecil
-                child: Table(
-                  border: TableBorder(
-                    horizontalInside: BorderSide(width: 0.5, color: Colors.grey),
-                    verticalInside: BorderSide(width: 0.5, color: Colors.grey),
-                    top: BorderSide(width: 1.0, color: Colors.black),
-                    bottom: BorderSide(width: 1.0, color: Colors.black),
-                    left: BorderSide(width: 1.0, color: Colors.black),
-                    right: BorderSide(width: 1.0, color: Colors.black),
-                  ),
-                  columnWidths: {
-                    0: FlexColumnWidth(2),
-                  },
-                  children: [
-                    TableRow(
-                      decoration: BoxDecoration(color: Colors.grey[200]),
-                      children: [
-                        for (var header in ["No Faktur", "Tanggal", "Customer", "Jumlah", "Total"])
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              header,
+            Expanded(
+              child: ListView.builder(
+                itemCount: salesData.length,
+                itemBuilder: (context, index) {
+                  final data = salesData[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProdukDetail(
+                            produkData: data,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                      elevation: 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "No Faktur: ${data['No Faktur']}",
                               style: TextStyle(
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blueGrey[800],
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                          ),
-                      ],
-                    ),
-                    for (var data in salesData)
-                      TableRow(
-                        children: [
-                          for (var value in [
-                            data["No Faktur"],
-                            data["Tanggal Penjualan"],
-                            data["Nama Customer"],
-                            data["Jumlah Barang"],
-                            data["Total Penjualan"]
-                          ])
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                value!,
-                                textAlign: TextAlign.center,
+                            SizedBox(height: 4),
+                            Text(
+                              "Tanggal Penjualan: ${data['Tanggal Penjualan']}",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            Text(
+                              "Nama Customer: ${data['Nama Customer']}",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            Text(
+                              "Jumlah Barang: ${data['Jumlah Barang']}",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            Text(
+                              "Total Penjualan: ${data['Total Penjualan']}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.teal,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                        ],
+                          ],
+                        ),
                       ),
-                  ],
-                ),
+                    ),
+                  );
+                },
               ),
             ),
             SizedBox(height: 16),
